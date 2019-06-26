@@ -7,6 +7,7 @@ import requests
 logging.basicConfig(format=u'%(filename)+13s [ LINE:%(lineno)-4s] %(levelname)-8s [%(asctime)s] %(message)s',
                     level=logging.INFO)
 
+
 ENDPOINT = 'https://api.monobank.ua/'
 
 
@@ -30,10 +31,14 @@ class Monobank(object):
     def _make_request(self, path, n=1):
         response = requests.get(ENDPOINT + path, headers=self.headers)
         data = response.json()
-        if response.status_code != 200:
-            message = data.get('errorDescription', str(data))
+        if response.status_code == 200:
+            return data
+        elif response.status_code == 429:
+            time.sleep(60 * n)
+            return self._make_request(path, n=n + 1)
+        else:
+            message = data.get('errorDescription', f'{data}')
             raise MonobankError(message)
-        return data
 
     def get_currency_info(self):
         url = 'bank/currency'
