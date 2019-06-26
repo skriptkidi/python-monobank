@@ -16,9 +16,12 @@ pip install monobank
 2) Use that token to initialize client:
 
 ```
-  token = 'xxxxxxxxxxxxxxx'
+  from monobank imprt Monobank
 
-  mono = Monobank(token)
+
+  TOKEN = 'xxxxxxxxxxxxxxx'
+
+  mono = Monobank(TOKEN)
   client_info = mono.personal_clientinfo()
   print(client_info)
 ```
